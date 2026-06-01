@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>愛情動物園：探索12種戀愛視角</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #fdf4ff;
+            color: #4a044e;
+            overflow-x: hidden;
+        }
+        .serif { font-family: 'Noto Serif TC', serif; }
+
+        /* 導覽列 */
+        .nav-btn {
+            transition: all 0.3s;
+            border-bottom: 4px solid transparent;
+            opacity: 0.6;
+        }
+        .nav-btn.active {
+            border-bottom-color: #d946ef; /* fuchsia-500 */
+            color: #a21caf; /* fuchsia-700 */
+            font-weight: 900;
+            opacity: 1;
+        }
+
+        /* 區塊切換 */
+        .section-pane { display: none; }
+        .section-pane.active { display: block; animation: fadeIn 0.4s ease-out; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* 動畫 */
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .anim-pop { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+        /* 詩歌卡片 */
+        .poem-card {
+            background: linear-gradient(145deg, #ffffff, #fdf4ff);
+        }
+        
+        /* 挖空樣式 */
+        .redacted {
+            background-color: #e2e8f0;
+            color: #e2e8f0;
+            border-radius: 6px;
+            user-select: none;
+            padding: 2px 8px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .redacted:hover {
+            background-color: #fecdd3;
+            color: #fecdd3;
+        }
+        .redacted.revealed {
+            background-color: transparent;
+            color: #e11d48;
+            font-weight: 900;
+            border-bottom: 3px dashed #e11d48;
+            padding: 0;
+            cursor: default;
+        }
+
+        /* 測驗選項 */
+        .quiz-opt {
+            transition: all 0.2s;
+            border: 2px solid #fbcfe8;
+        }
+        .quiz-opt:hover {
+            background-color: #fce7f3;
+            border-color: #f472b6;
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-20">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-xl sm:text-2xl font-black text-rose-600 flex items-center gap-2 serif">
+                🐾 愛情動物園
+            </h1>
+            <div class="text-sm font-bold text-fuchsia-600 bg-fuchsia-50 px-3 py-1 rounded-full border border-fuchsia-200">
+                國三國文素養課程
+            </div>
+        </div>
+        <!-- 導覽列 -->
+        <div class="max-w-6xl mx-auto flex px-2 sm:px-4 overflow-x-auto hide-scrollbar">
+            <button onclick="switchTab('intro')" id="tab-intro" class="nav-btn active flex-1 min-w-[100px] py-3 font-bold text-slate-600 text-sm sm:text-base whitespace-nowrap">課堂引言</button>
+            <button onclick="switchTab('guess')" id="tab-guess" class="nav-btn flex-1 min-w-[100px] py-3 font-bold text-slate-600 text-sm sm:text-base whitespace-nowrap">1. 詩歌與診療室</button>
+            <button onclick="switchTab('quiz')" id="tab-quiz" class="nav-btn flex-1 min-w-[100px] py-3 font-bold text-slate-600 text-sm sm:text-base whitespace-nowrap">2. 靈魂測驗</button>
+            <button onclick="switchTab('create')" id="tab-create" class="nav-btn flex-1 min-w-[100px] py-3 font-bold text-slate-600 text-sm sm:text-base whitespace-nowrap">3. 創作工坊</button>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8">
+
+        <!-- ==================== 0. 課堂引言 ==================== -->
+        <section id="sec-intro" class="section-pane active max-w-3xl mx-auto space-y-6">
+            <div class="bg-white p-8 sm:p-12 rounded-3xl shadow-lg text-center border-t-8 border-rose-400">
+                <div class="text-7xl mb-6">💌</div>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-800 mb-6 serif">如果我是一隻...<br><span class="text-rose-500 text-2xl sm:text-3xl mt-3 block">12種動物，12種愛情的模樣</span></h2>
+                <p class="text-lg text-slate-600 leading-relaxed font-bold mb-8 text-left bg-slate-50 p-6 rounded-2xl">
+                    「喜歡一個人，是什麼感覺？」<br><br>
+                    有時候，我們像是一隻默默陪伴的烏龜；有時候，我們像是一隻奮不顧身跳進水裡的青蛙；還有時候，我們可能變成了一隻渴望被看見的星星魚。<br><br>
+                    詩人透過 12 種動物的視角，寫下了 12 種截然不同的「愛情觀」。在這 150 分鐘的課程裡，我們將逐一解碼這些詩句，探討什麼是浪漫？什麼又是健康的愛？最後，換你寫下屬於你的動物情詩。
+                </p>
+                <button onclick="switchTab('guess')" class="bg-gradient-to-r from-rose-500 to-fuchsia-500 hover:from-rose-600 hover:to-fuchsia-600 text-white font-black text-xl px-12 py-4 rounded-full shadow-lg transition active:scale-95">
+                    進入第一堂課 🚀
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== 1. 詩歌與診療室 (合併版) ==================== -->
+        <section id="sec-guess" class="section-pane space-y-6">
+            <div class="bg-fuchsia-100 text-fuchsia-800 p-5 rounded-2xl font-bold flex items-start gap-4 shadow-sm max-w-4xl mx-auto">
+                <span class="text-3xl">🕵️‍♂️</span>
+                <div>
+                    <h3 class="text-xl font-black mb-1">第一堂課任務：詩歌解碼與愛情診療室</h3>
+                    <p class="text-base text-fuchsia-700">先猜猜看作者寫的是哪一種動物，解密後，我們會立刻進入「愛情診療室」，一起討論這種戀愛模式的優點與危險警報！</p>
+                </div>
+            </div>
+
+            <!-- 單卡輪播區 -->
+            <div class="max-w-4xl mx-auto">
+                <!-- 控制列 -->
+                <div class="flex justify-between items-center mb-4 px-2">
+                    <button onclick="changeGuess(-1)" class="px-5 py-2 bg-slate-200 rounded-full font-bold text-slate-700 hover:bg-slate-300 transition shadow-sm active:scale-95">⬅️ 上一首</button>
+                    <div id="guess-progress" class="font-black text-slate-400 text-xl tracking-widest">1 / 12</div>
+                    <button onclick="changeGuess(1)" class="px-5 py-2 bg-slate-200 rounded-full font-bold text-slate-700 hover:bg-slate-300 transition shadow-sm active:scale-95">下一首 ➡️</button>
+                </div>
+                
+                <!-- 卡片內容 (由JS動態生成) -->
+                <div id="guess-card-wrapper">
+                    <!-- 動態生成區塊 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== 2. 靈魂測驗 ==================== -->
+        <section id="sec-quiz" class="section-pane max-w-2xl mx-auto space-y-6">
+            <div class="bg-white p-8 rounded-3xl shadow-md border-t-8 border-indigo-400 text-center" id="quiz-container">
+                <h2 class="text-3xl font-black text-slate-800 mb-2 serif">🔮 你的戀愛動物靈魂</h2>
+                <p class="text-slate-500 font-bold mb-8 text-lg">透過 4 個情境題，測出你在這 12 種動物中，最偏向哪一種類型？（一頁一題）</p>
+                
+                <div id="quiz-q-area">
+                    <div class="text-xl font-black text-indigo-700 mb-6 bg-indigo-50 p-6 rounded-2xl shadow-inner" id="quiz-question">
+                        Q1: 當你喜歡上同班同學，你第一步會怎麼做？
+                    </div>
+                    <div class="space-y-4 text-left" id="quiz-options">
+                        <!-- 選項 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 測驗結果 -->
+            <div id="quiz-result" class="hidden bg-white p-10 rounded-3xl shadow-xl text-center border-4 border-fuchsia-300">
+                <p class="font-bold text-slate-500 mb-2 text-xl">測驗結果：你的戀愛原型是...</p>
+                <div class="text-9xl mb-6 mt-4" id="res-emoji">🐢</div>
+                <h2 class="text-4xl font-black text-slate-800 mb-4 serif" id="res-title">烏龜型戀人</h2>
+                <p class="text-xl font-bold text-rose-500 mb-8" id="res-subtitle">「慢慢爬，時時停下來看看你是不是和我在一起。」</p>
+                <div class="bg-slate-50 p-8 rounded-2xl text-left font-bold text-slate-700 leading-relaxed mb-8 text-lg shadow-inner" id="res-desc">
+                    你屬於「默默陪伴型」。你不追求轟轟烈烈的火花，而是相信細水長流。你願意配合對方的腳步，給予最安穩的依靠。但要小心，有時候走得太慢，可能會讓對方覺得你不在乎喔！
+                </div>
+                <button onclick="resetQuiz()" class="bg-fuchsia-100 text-fuchsia-700 font-black px-8 py-3 rounded-full hover:bg-fuchsia-200 transition">🔄 再測一次</button>
+            </div>
+        </section>
+
+        <!-- ==================== 3. 創作工坊 ==================== -->
+        <section id="sec-create" class="section-pane max-w-3xl mx-auto space-y-6">
+            <div class="bg-gradient-to-br from-slate-800 to-indigo-900 p-8 sm:p-12 rounded-3xl shadow-xl text-white">
+                <h2 class="text-3xl font-black mb-3 flex items-center gap-3 serif">✍️ 換你寫寫看</h2>
+                <p class="text-indigo-200 font-bold mb-10 text-base">挑選一種不在原本 12 種內的動物（例如：貓咪、企鵝、老鷹、蚊子...），仿照課文的句型，寫下一首屬於你的愛情短詩。</p>
+
+                <div class="space-y-8">
+                    <div>
+                        <label class="block font-black text-indigo-300 mb-3 text-lg">如果我是一隻...</label>
+                        <input type="text" id="create-animal" placeholder="例如：貓咪" class="w-full bg-slate-700/50 border-2 border-slate-600 rounded-xl px-5 py-4 text-white font-bold text-lg focus:border-fuchsia-400 outline-none transition">
+                    </div>
+                    
+                    <div>
+                        <label class="block font-black text-indigo-300 mb-3 text-lg">我會做什麼動作或行為？(行為描寫)</label>
+                        <textarea id="create-action" rows="2" placeholder="例如：在寒冷的冬天，鑽進你的外套裡" class="w-full bg-slate-700/50 border-2 border-slate-600 rounded-xl px-5 py-4 text-white font-bold text-lg focus:border-fuchsia-400 outline-none transition"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block font-black text-indigo-300 mb-3 text-lg">為的是什麼？送什麼給你？(愛情的表達)</label>
+                        <textarea id="create-purpose" rows="2" placeholder="例如：把我的體溫和呼嚕聲，全部送給你" class="w-full bg-slate-700/50 border-2 border-slate-600 rounded-xl px-5 py-4 text-white font-bold text-lg focus:border-fuchsia-400 outline-none transition"></textarea>
+                    </div>
+
+                    <button onclick="generatePoem()" class="w-full bg-gradient-to-r from-fuchsia-500 to-rose-500 hover:from-fuchsia-600 hover:to-rose-600 text-white font-black text-2xl py-5 rounded-2xl shadow-lg transition active:scale-95 mt-4">
+                        ✨ 生成我的專屬情詩
+                    </button>
+                </div>
+            </div>
+
+            <!-- 生成的詩歌卡 -->
+            <div id="my-poem-card" class="hidden bg-white p-10 rounded-3xl shadow-xl border-4 border-fuchsia-200 text-center relative overflow-hidden mt-8 anim-pop">
+                <div class="absolute -top-10 -right-10 text-9xl opacity-5">✒️</div>
+                <h3 class="text-3xl font-black text-slate-800 mb-8 serif border-b-2 border-slate-100 pb-6">《如果我是一隻<span id="out-animal" class="text-fuchsia-600"></span>》</h3>
+                <div class="text-2xl font-bold text-slate-700 leading-loose serif space-y-4">
+                    <p>如果我是一隻<span class="text-fuchsia-600" id="out-animal2"></span>，</p>
+                    <p id="out-action"></p>
+                    <p id="out-purpose"></p>
+                    <p>只要你願意。</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JS 資料與邏輯 -->
+    <script>
+        // --- 核心資料：12首詩 (加入隱藏按鈕狀態) ---
+        const poemsData = [
+            { id: 1, animal: '蟋蟀', emoji: '🦗', tag: '默默才華型', quote: '秋天的晚上，整個秋天的晚上，我會唱歌給你聽...', pro: '願意花長時間陪伴，用自己的才華(歌聲)取悅對方。', con: '整晚唱歌可能會干擾別人；有時候對方可能需要的是安靜。', question: '如果有人每天半夜都在你窗下唱歌給你聽，你覺得浪漫還是擾民？', type: 'companion', isRevealed: false, isProRevealed: false, isConRevealed: false, lines: ['如果我是一隻[ANIMAL]，', '秋天的晚上，', '整個秋天的晚上，', '我會唱歌給你聽，', '銀鈴的歌聲，', '你永遠忘不了。'] },
+            { id: 2, animal: '蝸牛', emoji: '🐌', tag: '執著跟隨型', quote: '我要搬到你家隔壁，這樣就可以每天看到你。', pro: '為了愛情願意改變自己的居住地，非常有毅力。', con: '沒有問過對方意願就搬到隔壁，可能會侵犯隱私，帶有跟蹤狂的疑慮。', question: '為了「每天看到你」而搬到你家隔壁，這種行為在現實中需要注意什麼界線？', type: 'companion', isRevealed: false, isProRevealed: false, isConRevealed: false, lines: ['如果我是一隻[ANIMAL]，', '載著我的屋子，', '在雨中爬呀爬，', '我要搬到你家隔壁，', '這樣就可以每天看到你。'] },
+            { id: 3, animal: '小瓢蟲', emoji: '🐞', tag: '化為附屬型', quote: '希望自己變成你最愛的戒指。', pro: '極度渴望親近，願意把自己變成美好的事物陪伴在對方指尖。', con: '愛情中「物化」自己，失去了自我的主體性，只想成為對方的裝飾品。', question: '在愛情裡，為了討好對方而失去原本的自己（變成戒指），這樣快樂嗎？', type: 'passive', isRevealed: false, isProRevealed: false, isConRevealed: false, lines: ['如果我是一隻[ANIMAL]，', '背上閃閃的是亮亮的寶石紅，', '我會靜靜伏在你的手指頭，', '而且，', '希望自己變成你最愛的戒指。'] },
+            { id: 4, animal: '烏龜', emoji: '🐢', tag: '攜手同行型', quote: '看看你是不是和我在一起，在比賽中獲得勝利。', pro: '不求快，重視兩人是否能「並肩同行」，有福同享。', con: '如果兩人的步調差異太大，硬要走在一起可能會互相拖累。', question: '「兩個人一起慢慢走」和「一個人快速衝刺」，你比較嚮往哪一種關係？', type: 'companion', isRevealed: false, isProRevealed: false, isConRevealed: false, lines: ['如果我是一隻[ANIMAL]，', '我要慢慢爬，', '時時停下來，', '看看你，看看你，', '看看你是不是和我在一起，', '在比賽中獲得勝利。'] },
+            { id: 5, animal: '蜘蛛', emoji: '🕷️', tag: '盡力奉獻型', quote: '捕捉跳升的太陽，送給你。', pro: '願意把世上最美好的事物（朝露、太陽）都編織起來送給對方，付出無極限。', con: '蜘蛛網本身是陷阱，這種愛可能帶有「束縛」與「捕捉」的潛意識。', question: '對方把他認為「最好的東西」硬塞給你，但那不一定是你想要的，該怎麼辦？', type: 'giver', isRevealed: false, isProRevealed: false, isConRevealed: false, lines: ['如果我是一隻[ANIMAL]，', '在夏天的早晨，', '我會將晶亮的露珠，', '串在網上，', '捕捉跳升的太陽，', '送給你。'] },
+            { id: 6, animal: '青蛙', emoji: '🐸', tag: '熱烈主動型', quote: '用全身力氣跳躍，一頭栽進水池中你的影子裡。', pro: '充滿熱情，為了愛奮不顧身，毫不保留地投入。', con: '容易一頭熱，可能沒有考慮對方的感受就撲上去，造成對方壓力或驚嚇。', question: '如果有人像青蛙一樣突然對你「奮不顧身地撲過來表白」，你會覺得感動還是害怕？', type: 'passionate', isRevealed: false, isProRevealed: false, isConRevealed: false, lines: ['如果我是一隻[ANIMAL]，', '坐在水蓮上，', '看見你在池塘邊，', '我會滿心歡悅，', '用全身力氣跳躍，', '一頭栽進水池中你的影子裡。'] },
+            { id: 7, animal: '螢火蟲', emoji: '✨', tag: '溫暖照亮型', quote: '只要你靠近我，我會用我的金光，充滿你用雙手合成的手杯。', pro: '在黑暗中給予溫暖的光芒，且尊重距離（只要你靠近我）。', con: '過度燃燒自己來照亮別人，可能會讓自己精疲力盡。', question: '螢火蟲的愛是「你靠近我，我才發光」。這跟青蛙的「主動撲上去」有什麼不同？', type: 'giver', isRevealed: false, isProRevealed: false, isConRevealed: false, lines: ['如果我是一隻[ANIMAL]，', '忽高又忽低，', '在夜裡滑翔，', '只要你靠近我，', '我會用我的金光，', '充滿你用雙手合成的手杯。'] },
+            { id: 8, animal: '蜜蜂', emoji: '🐝', tag: '務實經營型', quote: '我會邀請你到我家來吃我的蜜糖，只要你肯跟我走。', pro: '努力工作（採蜜）創造實質的財富與甜美，並願意大方分享。', con: '愛情建立在物質條件（蜜糖）上，且帶有條件交換的意味（只要你肯跟我走）。', question: '「麵包與愛情」：蜜蜂用辛苦採來的蜜糖吸引對方，你覺得在愛情中物質基礎重要嗎？', type: 'passionate', isRevealed: false, isProRevealed: false, isConRevealed: false, lines: ['如果我是一隻[ANIMAL]，', '忙著在玫瑰園裡，', '飛到東，飛到西，', '為的是採蜜集粉，', '我會邀請你到我家來吃我的蜜糖，', '只要你肯跟我走。'] },
+            { id: 9, animal: '蜥蜴', emoji: '🦎', tag: '俏皮陪伴型', quote: '出出入入，我會和你玩捉迷藏，整天玩。', pro: '把愛情當作遊戲，充滿童趣與歡樂，相處起來輕鬆無壓力。', con: '可能缺乏嚴肅的承諾，關係一直停留在玩樂階段，忽冷忽熱（捉迷藏）。', question: '整天玩「捉迷藏」的愛情，會不會讓人缺乏安全感？', type: 'companion', isRevealed: false, isProRevealed: false, isConRevealed: false, lines: ['如果我是一隻[ANIMAL]，', '成天在石塊磊磊中，', '出出入入，', '我會和你玩捉迷藏，', '整天玩。'] },
+            { id: 10, animal: '蛤蠣', emoji: '🦪', tag: '防衛隱藏型', quote: '假裝自己是礁岸的一顆小石頭，你來找我，我會使你驚喜。', pro: '內心藏著珍貴的寶物（珍珠），只有真正有心尋找的人才能獲得。', con: '過度偽裝自己（假裝是石頭），如果對方沒有耐心尋找，就會錯過彼此。', question: '明明有珍珠卻要裝成石頭等人來找。在愛情中「口是心非」好嗎？', type: 'passive', isRevealed: false, isProRevealed: false, isConRevealed: false, lines: ['如果我是一隻[ANIMAL]，', '假裝自己是礁岸的一顆小石頭，', '你來找我，', '我會使你驚喜，', '送你一個禮物──珍珠。'] },
+            { id: 11, animal: '蜻蜓', emoji: '🚁', tag: '使命必達型', quote: '我要載運你的願望，送到傍晚出現的第一顆星星。', pro: '重視對方的夢想，願意像直升機一樣成為對方的助力，幫忙實現願望。', con: '把對方的願望當成自己的責任，可能會忽略了自己本身的需要。', question: '蜻蜓幫對方把願望送給星星。愛情中，我們有義務幫伴侶實現所有願望嗎？', type: 'giver', isRevealed: false, isProRevealed: false, isConRevealed: false, lines: ['如果我是一隻[ANIMAL]，', '輕輕搖擺我的翼，', '照著陽光，', '像是直升機，', '我要載運你的願望，', '送到傍晚出現的第一顆星星，', '而且讓它變成真的。'] },
+            { id: 12, animal: '星星魚', emoji: '⭐', tag: '宿命被動型', quote: '我會等待，等待你找到我，我希望自己能成為那一顆星。', pro: '對愛情抱有極高、神聖的期待（聖誕樹頂的星），願意耐心等待對的人。', con: '完全被動（被海水沖上岸、等待被找到），把主導權交給命運，容易受傷。', question: '星星魚只能被動「等待你找到我」。如果不主動出擊，會不會錯過真愛？', type: 'passive', isRevealed: false, isProRevealed: false, isConRevealed: false, lines: ['如果我是一隻[ANIMAL]，', '海水把我沖上岸邊，', '我會等待，', '等待你找到我，', '我希望自己能成為那一顆星，', '掛在你的聖誕樹頂。'] }
+        ];
+
+        // --- UI 切換邏輯 ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+
+            document.querySelectorAll('.section-pane').forEach(pane => pane.classList.remove('active'));
+            document.getElementById(`sec-${tabId}`).classList.add('active');
+        }
+
+        // ==================== 模組 1：詩歌與診療室 (合併版) ====================
+        let currentGuessIndex = 0;
+
+        function renderGuess() {
+            const poem = poemsData[currentGuessIndex];
+            const wrapper = document.getElementById('guess-card-wrapper');
+            
+            // 處理詩句挖空或顯示
+            const poemLines = poem.lines.map(line => {
+                if (poem.isRevealed) {
+                    return line.replace('[ANIMAL]', `<span class="text-rose-600 font-black border-b-2 border-dashed border-rose-600 px-1 text-2xl">${poem.animal}</span>`);
+                } else {
+                    return line.replace('[ANIMAL]', `<span class="redacted" onclick="revealCurrentAnimal()">＿＿＿</span>`);
+                }
+            }).join('<br>');
+
+            // 處理診療室的HTML (只有在解密後才顯示)
+            let clinicHTML = '';
+            if (poem.isRevealed) {
+                clinicHTML = `
+                    <div class="mt-12 border-t-4 border-dashed border-rose-200 pt-10 anim-pop">
+                        <h3 class="text-3xl font-black serif text-slate-800 mb-6 flex items-center gap-4">
+                            <span class="text-5xl bg-slate-50 p-4 rounded-full shadow-inner">${poem.emoji}</span> 
+                            <div>
+                                愛情診療室 <br>
+                                <span class="text-xl text-fuchsia-600">${poem.animal}型戀人</span>
+                            </div>
+                        </h3>
+                        <div class="flex flex-wrap items-center gap-4 mb-6">
+                            <span class="px-5 py-2 rounded-full text-sm font-bold text-white bg-slate-800 tracking-wider">${poem.tag}</span>
+                        </div>
+
+                        <div class="grid sm:grid-cols-2 gap-6 mb-8">
+                            <!-- 浪漫優點區塊 -->
+                            <div class="bg-green-50 p-6 rounded-2xl border border-green-200 flex flex-col">
+                                <h4 class="font-black text-green-700 flex items-center gap-2 mb-4 text-lg">👍 浪漫優點</h4>
+                                ${poem.isProRevealed ? 
+                                    `<p class="text-slate-700 font-bold leading-relaxed text-base anim-pop">${poem.pro}</p>` : 
+                                    `<button onclick="revealPro()" class="mt-auto w-full py-4 bg-green-200 text-green-800 font-black rounded-xl hover:bg-green-300 transition shadow-sm active:scale-95">👁️ 掀開優點 (請先讓同學分享)</button>`
+                                }
+                            </div>
+                            
+                            <!-- 危險警報區塊 -->
+                            <div class="bg-red-50 p-6 rounded-2xl border border-red-200 flex flex-col">
+                                <h4 class="font-black text-red-700 flex items-center gap-2 mb-4 text-lg">⚠️ 危險警報</h4>
+                                ${poem.isConRevealed ? 
+                                    `<p class="text-slate-700 font-bold leading-relaxed text-base anim-pop">${poem.con}</p>` : 
+                                    `<button onclick="revealCon()" class="mt-auto w-full py-4 bg-red-200 text-red-800 font-black rounded-xl hover:bg-red-300 transition shadow-sm active:scale-95">👁️ 掀開警報 (請先讓同學分享)</button>`
+                                }
+                            </div>
+                        </div>
+
+                        <div class="p-8 bg-slate-800 text-white rounded-3xl shadow-lg border-b-4 border-slate-900">
+                            <h4 class="font-black text-yellow-300 mb-4 text-xl flex items-center gap-2">🤔 班級思辨題</h4>
+                            <p class="font-bold text-lg leading-relaxed text-slate-100">${poem.question}</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 組合整體 HTML
+            wrapper.innerHTML = `
+                <div class="poem-card p-8 sm:p-12 rounded-3xl shadow-xl border-2 border-slate-100 relative min-h-[400px]">
+                    <div class="absolute top-6 right-8 text-slate-200 font-black text-7xl italic select-none">#${currentGuessIndex + 1}</div>
+                    
+                    <div class="text-slate-700 font-bold leading-loose serif text-2xl mb-8 relative z-10 space-y-2">
+                        ${poemLines}
+                    </div>
+                    
+                    <div class="relative z-10">
+                        ${!poem.isRevealed ? `
+                        <button onclick="revealCurrentAnimal()" class="w-full bg-slate-100 hover:bg-rose-100 text-slate-600 hover:text-rose-600 font-black py-4 rounded-xl transition text-xl shadow-sm border-2 border-slate-200 hover:border-rose-300 active:scale-95">
+                            👁️ 點我解密
+                        </button>
+                        ` : `
+                        <div class="text-center bg-rose-50 border-2 border-rose-200 rounded-xl py-4 anim-pop">
+                            <span class="text-rose-500 font-black text-2xl">✨ 答案是：${poem.animal}！ ${poem.emoji}</span>
+                        </div>
+                        `}
+                    </div>
+
+                    ${clinicHTML}
+                </div>
+            `;
+            
+            // 更新進度條文字
+            document.getElementById('guess-progress').innerText = `${currentGuessIndex + 1} / ${poemsData.length}`;
+        }
+
+        function changeGuess(dir) {
+            currentGuessIndex += dir;
+            if(currentGuessIndex < 0) currentGuessIndex = poemsData.length - 1;
+            if(currentGuessIndex >= poemsData.length) currentGuessIndex = 0;
+            
+            renderGuess();
+
+            // 切換題目時重置整張卡片的動畫，並捲回頂部
+            const wrapper = document.getElementById('guess-card-wrapper');
+            wrapper.classList.remove('anim-pop');
+            void wrapper.offsetWidth; // trigger reflow
+            wrapper.classList.add('anim-pop');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 解密功能
+        function revealCurrentAnimal() {
+            poemsData[currentGuessIndex].isRevealed = true;
+            renderGuess();
+            // 解密後稍微往下捲動，讓學生注意到診療室出現了
+            setTimeout(() => {
+                window.scrollBy({ top: 200, behavior: 'smooth' });
+            }, 100);
+        }
+
+        function revealPro() {
+            poemsData[currentGuessIndex].isProRevealed = true;
+            renderGuess();
+        }
+
+        function revealCon() {
+            poemsData[currentGuessIndex].isConRevealed = true;
+            renderGuess();
+        }
+
+        // ==================== 模組 2：靈魂測驗 ====================
+        const quizQuestions = [
+            {
+                q: "Q1: 喜歡上同班同學，你第一步會怎麼做？",
+                opts: [
+                    { text: "A. 直接衝上去跟他告白！不試怎麼知道？", type: "passionate" },
+                    { text: "B. 假裝不在意，等他主動來找我講話。", type: "passive" },
+                    { text: "C. 默默觀察他需要什麼，幫他把事情做好。", type: "giver" },
+                    { text: "D. 藉故坐在他附近，找機會跟他聊天、開玩笑。", type: "companion" }
+                ]
+            },
+            {
+                q: "Q2: 伴侶遇到挫折心情不好，你會如何安慰他？",
+                opts: [
+                    { text: "A. 買最貴、最好的禮物送他，盡全力逗他開心。", type: "giver" },
+                    { text: "B. 安靜地陪在他身邊，聽他抱怨，一起慢慢走過低潮。", type: "companion" },
+                    { text: "C. 給他一個大大的擁抱，大聲告訴他『有我在！』", type: "passionate" },
+                    { text: "D. 躲在旁邊看，如果他需要我，他自己會說。", type: "passive" }
+                ]
+            },
+            {
+                q: "Q3: 關於「愛情與距離」，你比較認同哪一句話？",
+                opts: [
+                    { text: "A. 只要能待在你旁邊，要我搬家也可以！", type: "companion" },
+                    { text: "B. 只要你靠近我，我就會為你發光。", type: "giver" },
+                    { text: "C. 就算我在角落，相信命中注定的人一定會發現我的好。", type: "passive" },
+                    { text: "D. 愛就是要佔有，最好每天黏在一起！", type: "passionate" }
+                ]
+            }
+        ];
+
+        let currentQuiz = 0;
+        let scores = { passive: 0, companion: 0, giver: 0, passionate: 0 };
+
+        function renderQuiz() {
+            if (currentQuiz >= quizQuestions.length) {
+                showQuizResult();
+                return;
+            }
+            const q = quizQuestions[currentQuiz];
+            document.getElementById('quiz-question').innerText = q.q;
+            
+            const optArea = document.getElementById('quiz-options');
+            optArea.innerHTML = '';
+            q.opts.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "quiz-opt w-full text-left bg-white p-5 rounded-2xl font-bold text-slate-700 shadow-sm text-lg";
+                btn.innerText = opt.text;
+                btn.onclick = () => {
+                    scores[opt.type]++;
+                    currentQuiz++;
+                    
+                    const qArea = document.getElementById('quiz-q-area');
+                    qArea.classList.remove('anim-pop');
+                    void qArea.offsetWidth;
+                    qArea.classList.add('anim-pop');
+                    
+                    renderQuiz();
+                };
+                optArea.appendChild(btn);
+            });
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            
+            // 找最高分
+            let maxType = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+            
+            // 對應結果
+            const results = {
+                'passive': { emoji: '🦪', title: '蛤蠣 / 星星魚型', sub: '「等待對的人來發現我的珍珠」', desc: '你屬於防衛被動型。你不輕易展露自己的心意，害怕受傷，總是等待對方主動。雖然你的內心很豐富（像珍珠），但如果總是裝成石頭，可能會錯失良緣喔！偶爾勇敢一點吧！' },
+                'companion': { emoji: '🐢', title: '烏龜 / 蝸牛型', sub: '「慢慢爬，只要能每天看到你」', desc: '你屬於默默陪伴型。你不追求轟轟烈烈，而是相信細水長流。你願意配合對方的腳步，給予最安穩的依靠。但要注意保持健康的界線，不要像蝸牛一樣給人壓迫感喔！' },
+                'giver': { emoji: '🕷️', title: '蜘蛛 / 蜻蜓型', sub: '「捕捉跳升的太陽，送給你」', desc: '你屬於盡力奉獻型。只要愛上一個人，你就像直升機一樣想幫他實現所有願望，把最好的都給他。你的愛很偉大，但別忘了也要多愛自己一點，不要過度消耗自我。' },
+                'passionate': { emoji: '🐸', title: '青蛙 / 蜜蜂型', sub: '「用全身力氣跳躍，一頭栽進水裡」', desc: '你屬於熱烈主動型。面對愛情你毫不保留，充滿熱情與行動力！跟你戀愛絕對不無聊。但有時候容易一頭熱，記得在撲上去之前，先觀察一下對方的感受與意願喔！' }
+            };
+
+            const res = results[maxType];
+            document.getElementById('res-emoji').innerText = res.emoji;
+            document.getElementById('res-title').innerText = res.title;
+            document.getElementById('res-subtitle').innerText = res.sub;
+            document.getElementById('res-desc').innerText = res.desc;
+
+            const resBox = document.getElementById('quiz-result');
+            resBox.classList.remove('hidden');
+            resBox.classList.add('anim-pop');
+        }
+
+        function resetQuiz() {
+            currentQuiz = 0;
+            scores = { passive: 0, companion: 0, giver: 0, passionate: 0 };
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            renderQuiz();
+        }
+
+        // ==================== 模組 3：創作工坊 ====================
+        function generatePoem() {
+            const animal = document.getElementById('create-animal').value.trim() || '貓咪';
+            const action = document.getElementById('create-action').value.trim() || '在寒冷的冬天，鑽進你的外套裡';
+            const purpose = document.getElementById('create-purpose').value.trim() || '把我的體溫和呼嚕聲，全部送給你';
+
+            document.getElementById('out-animal').innerText = animal;
+            document.getElementById('out-animal2').innerText = animal;
+            document.getElementById('out-action').innerText = action + '，';
+            document.getElementById('out-purpose').innerText = purpose + '，';
+
+            const card = document.getElementById('my-poem-card');
+            card.classList.remove('hidden');
+            
+            card.classList.remove('anim-pop');
+            void card.offsetWidth;
+            card.classList.add('anim-pop');
+            
+            card.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+
+        // --- 初始化啟動 ---
+        window.onload = () => {
+            renderGuess();
+            renderQuiz();
+        };
+
+    </script>
+</body>
+</html>
